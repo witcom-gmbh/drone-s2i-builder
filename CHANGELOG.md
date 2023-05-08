@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v0.1.1 - 2023-05-08
+#### Bug Fixes
+- Enable debuggig for docker-daemon - (6228eb4) - iceman91176
+
+- - -
+
 ## v0.1.0 - 2023-05-08
 #### Continuous Integration
 - Add cocogitto hooks - (3a0ac49) - iceman91176

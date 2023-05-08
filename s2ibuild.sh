@@ -42,7 +42,8 @@ checkdocker(){
 
 # Launching Docker
 
-nohup dockerd -s overlay2 $OPTS </dev/null >/dev/null 2>&1 &
+# nohup dockerd -s overlay2 $OPTS </dev/null >/dev/null 2>&1 &
+nohup dockerd -s overlay2 $OPTS &
 
 # Wait for docker daemon
 echo -e "Waiting for docker daemon"

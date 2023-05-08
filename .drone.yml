@@ -9,7 +9,6 @@ steps:
     repo: artifactory.witcom.services/drone-plugins/drone-s2i-builder
     registry: artifactory.witcom.services
     dry_run: true
-    auto_tag: true    
     username:
       from_secret: artifactory-user-01
     password:
@@ -34,7 +33,9 @@ steps:
   settings:
     repo: artifactory.witcom.services/drone-plugins/drone-s2i-builder
     registry: artifactory.witcom.services
-    auto_tag: true    
+    tags:
+    - latest
+    - ${DRONE_TAG}
     username:
       from_secret: artifactory-user-01
     password:

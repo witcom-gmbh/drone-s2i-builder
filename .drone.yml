@@ -23,3 +23,29 @@ trigger:
   - push
   - pull_request
 
+---
+kind: pipeline
+type: docker
+name: Build and release image
+
+steps:
+- name: docker build
+  image: plugins/docker
+  settings:
+    repo: artifactory.witcom.services/drone-plugins/drone-s2i-builder
+    registry: artifactory.witcom.services
+    auto_tag: true    
+    username:
+      from_secret: artifactory-user-01
+    password:
+      from_secret: artifactory-password-01
+  when:
+    branch:
+    - main
+
+trigger:
+  event:
+  - tag
+  ref:
+  - refs/tags/v*
+

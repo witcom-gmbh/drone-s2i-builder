@@ -87,9 +87,13 @@ fi
 # push tag if wanted
 if [ "$PLUGIN_PUSH" == "true" ]; then
     echo "Pushing $PLUGIN_TARGET_IMAGE"
-
     for tag in ${PLUGIN_TAGS//,/" "}; do
-        docker push ${PLUGIN_TARGET_IMAGE}:${tag} || exit 1
+        if [ "$tag" != "v" ]; then
+           set -x
+           docker tag ${target} ${PLUGIN_TARGET_IMAGE}:${tag}
+           docker push ${PLUGIN_TARGET_IMAGE}:${tag} || exit 1
+           set +x
+        fi   
     done
     echo "Pushed"
 fi

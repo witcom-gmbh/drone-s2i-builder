@@ -1,0 +1,25 @@
+kind: pipeline
+type: docker
+name: Build project
+
+steps:
+- name: docker build
+  image: plugins/docker
+  settings:
+    repo: artifactory.witcom.services/drone-plugins/drone-s2i-builder
+    registry: artifactory.witcom.services
+    dry_run: true
+    auto_tag: true    
+    username:
+      from_secret: artifactory-user-01
+    password:
+      from_secret: artifactory-password-01
+  when:
+    branch:
+    - main
+
+trigger:
+  event:
+  - push
+  - pull_request
+

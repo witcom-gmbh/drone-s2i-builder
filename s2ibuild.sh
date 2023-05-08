@@ -43,7 +43,7 @@ checkdocker(){
 # Launching Docker
 
 # nohup dockerd -s overlay2 $OPTS </dev/null >/dev/null 2>&1 &
-nohup dockerd -s overlay2 $OPTS &
+# nohup dockerd -s overlay2 $OPTS &
 
 # Wait for docker daemon
 echo -e "Waiting for docker daemon"
@@ -51,9 +51,9 @@ echo -e "Waiting for docker daemon"
 COUNT=0
 checkdocker || :
 until [ $RETVAL == "ok" ]; do
-    sleep 1
+    sleep 5
     COUNT=$((COUNT+1))
-    [ $COUNT -gt 10 ] && echo "Docker cannot start" && exit 1
+    [ $COUNT -gt 60 ] && echo "Docker cannot start" && exit 1
     checkdocker || :
 done
 echo
@@ -94,9 +94,8 @@ if [ "$PLUGIN_PUSH" == "true" ]; then
     echo "Pushed"
 fi
 
-set -x
-docker system prune -f || :
-
-set +x
+# set -x
+# docker system prune -f || :
+# set +x
 
 exit 0

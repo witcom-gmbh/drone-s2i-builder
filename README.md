@@ -40,11 +40,14 @@ kind: pipeline
 name: default
 
 steps:
+
   - name: s2i-build-angular
     image: some-repo/drone-s2i-builder:latest
     volumes:
     - name: cache
       path: /drone/cache
+    - name: dockersock
+      path: /var/run
     pull: always
     settings:
       builder_image: registry.access.redhat.com/ubi8/nodejs-16-minimal:1-14 
@@ -57,6 +60,8 @@ steps:
     volumes:
     - name: cache
       path: /drone/cache
+    - name: dockersock
+      path: /var/run
     pull: always
     settings:
       builder_image: registry.access.redhat.com/ubi9/nginx-120
@@ -71,20 +76,29 @@ steps:
       password:
         from_secret: registry-password
 
+services:
+- name: docker
+  image: docker:dind
+  privileged: true
+  volumes:
+  - name: dockersock
+    path: /var/run
+
 volumes:
 - name: cache
   temp: {}
-
+- name: dockersock
+  temp: {}
 ```
 
-## Privileged mode
+## Docker-in-docker
 
-As we need docker daemon to be launched, you'll need to use "`privileged: true`". That means that the repository should be trusted.
+As we need a docker daemon to be launched, we use a docker-in-docker instance which is started as a privileged service.
 
-To avoid that, you can add the plugin to `DRONE_RUNNER_PRIVILEGED_IMAGES`:
+To avoid that, you can add the docker:dind image to `DRONE_RUNNER_PRIVILEGED_IMAGES`:
 
 ```
-DRONE_RUNNER_PRIVILEGED_IMAGES=plugins/docker,plugins/ecr,metal3d/drone-plugin-s2i
+DRONE_RUNNER_PRIVILEGED_IMAGES=plugins/docker,plugins/ecr,docker:dind
 ```
 
 That way, you will not need to set privileged mode, and others users will be able to build images with s2i.

@@ -1,5 +1,7 @@
 # Drone.io plugin to build images with s2i
 
+[![Build Status](https://drone-gh-01.witcom.services/api/badges/witcom-gmbh/drone-s2i-builder/status.svg?ref=refs/heads/main)](https://drone-gh-01.witcom.services/witcom-gmbh/drone-s2i-builder)
+
 [Source to image](https://github.com/openshift/source-to-image), aka "s2i", is a Red Hat project originaly created to build images from sources without the need of a Dockerfile, made for Openshit/OKD (see https://www.openshift.com/ and the community version https://www.okd.io/). It is possible to create multi-stage or "chained" images, to create runtime-images with a small footprint. 
 
 [Drone](https://drone.io) is a CI/CD solution that can run on Docker and Kubernetes.
@@ -14,7 +16,7 @@ In your .drone.yml file, you can use `some-repo/drone-s2i-builder` - you can use
 
 - `builder_image` (mandatory) is the "s2i" image that is used to build the sources
 - `push` (boolean, default to false) will push your image to `target_image` after the build
-- `target_image` (mandatory if `push` is true) is the target-image that is created the s2i build-process 
+- `target_image` (mandatory if `push` is true) is the target-image that is created by the s2i build-process 
 - `source` (defaults to DRONE_WORKSPACE_BASE) Path to the sources. 
 - `extract` (boolean, default to false) will extract parts of the built-image to a `cache_dir` directory
 - `extract_path` (mandatory if `extract` is true) is the path of the build-output image that will be extracted 

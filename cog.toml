@@ -3,7 +3,12 @@ tag_prefix = "v"
 ignore_merge_commits = true
 branch_whitelist = ["main"]
 pre_bump_hooks = []
-post_bump_hooks = []
+
+post_bump_hooks = [
+    "git push",
+    "git push origin v{{version}}"
+]
+
 pre_package_bump_hooks = []
 post_package_bump_hooks = []
 

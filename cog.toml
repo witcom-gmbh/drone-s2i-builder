@@ -1,6 +1,7 @@
 from_latest_tag = false
-ignore_merge_commits = false
-branch_whitelist = []
+tag_prefix = "v"
+ignore_merge_commits = true
+branch_whitelist = ["main"]
 pre_bump_hooks = []
 post_bump_hooks = []
 pre_package_bump_hooks = []
@@ -10,7 +11,12 @@ post_package_bump_hooks = []
 
 [changelog]
 path = "CHANGELOG.md"
-authors = []
+remote = "github.com"
+repository = "drone-s2i-builder"
+owner = "witcom-gmbh"
+authors = [
+    { signature = "Carsten Buchberger", username = "iceman91176" }
+]
 
 [bump_profiles]
 

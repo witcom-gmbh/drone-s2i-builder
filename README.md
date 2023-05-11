@@ -21,8 +21,10 @@ In your .drone.yml file, you can use `some-repo/drone-s2i-builder` - you can use
 - `extract` (boolean, default to false) will extract parts of the built-image to a `cache_dir` directory
 - `extract_path` (mandatory if `extract` is true) is the path of the build-output image that will be extracted 
 - `cache_dir` (mandatory if `extract` is true) is the temporary path where `extract_path` will be stored
+- `inject_dir` an optional directory that will be injected into the s2i-build container
+- `env_vars` (array of KEY=VAL) env-variables that will be passed into the s2i-build container
 - `context` (string, default to "./") is the context directory inside your repository
-- `registry` is the registry you want to login (login not yet supported)
+- `registry` is the registry you want to login
 - `insecure` (boolean, default to false) to use the `registry` as "insecure" (http instead of https)
 - `username` if set with `password`, try to authenticate `registry` with that user
 - `password` is the password used to authenticate user 
@@ -51,9 +53,9 @@ steps:
     pull: always
     settings:
       builder_image: registry.access.redhat.com/ubi8/nodejs-16-minimal:1-14 
-	  extract: true
-	  extract_path: /opt/app-root/src/dist/my-app
-	  cache_dir: /drone/cache
+	    extract: true
+	    extract_path: /opt/app-root/src/dist/my-app
+	    cache_dir: /drone/cache
       target: docker-registry:5000/witcom/webapp
   - name: s2i-build-nginx
     image: some-repo/drone-s2i-builder:latest
@@ -65,8 +67,8 @@ steps:
     pull: always
     settings:
       builder_image: registry.access.redhat.com/ubi9/nginx-120
-	  push: true
-	  source: /drone/cache
+	    push: true
+	    source: /drone/cache
       target_image: docker-registry:5000/witcom/webapp
       tags:
         - latest

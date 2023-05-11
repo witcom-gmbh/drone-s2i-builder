@@ -33,6 +33,22 @@ if [ "$PLUGIN_INCREMENTAL" == "true" ]; then
     S2IOPTS="--incremental"
 fi
 
+#Directory injection
+S2IINJECT=""
+if [ "$PLUGIN_INJECT_DIR" != "" ]; then
+    S2IINJECT="--inject $PLUGIN_INJECT_DIR"
+fi
+
+
+#ENV Variables for S2I
+S2IENVVARS=()
+OLDIFS=$IFS
+IFS=','
+for envvar in ${PLUGIN_ENV_VARS}; do
+    S2IENVVARS+=(--env=$envvar) 
+done
+IFS=$OLDIFS
+
 # Docker daemon checker
 RETVAL="ko"
 checkdocker(){
@@ -70,9 +86,10 @@ if [ "$PLUGIN_USERNAME" != "" ] && [ "$PLUGIN_PASSWORD" != "" ]; then
 fi
 
 echo "Building image"
+
 set -x
 target=${RANDOM}-${RANDOM}-${RANDOM}-${RANDOM}
-s2i build ${PLUGIN_SOURCE} $S2IOPTS --context-dir=${PLUGIN_CONTEXT-./} ${PLUGIN_BUILDER_IMAGE} ${target} --keep-symlinks --env=DRONE=true || exit 1
+s2i build ${PLUGIN_SOURCE} $S2IOPTS $S2IINJECT --context-dir=${PLUGIN_CONTEXT-./} ${PLUGIN_BUILDER_IMAGE} ${target} --keep-symlinks --env=DRONE=true "${S2IENVVARS[@]}" || exit 1
 set +x
 
 if [ "$PLUGIN_EXTRACT" == "true" ] && [ "$PLUGIN_EXTRACT_PATH" != "" ] && [ "$PLUGIN_CACHE_DIR" != "" ]; then
